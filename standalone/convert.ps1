@@ -1,4 +1,9 @@
-Remove-Item -Recurse -Force -ErrorAction silentlycontinue nowide
+If (Test-Path nowide\src\iostream.cpp){
+	Exit
+}
+Remove-Item -Recurse -Force -ErrorAction silentlycontinue nowide\src
+Remove-Item -Recurse -Force -ErrorAction silentlycontinue nowide\test
+Remove-Item -Recurse -Force -ErrorAction silentlycontinue nowide\nowide
 New-Item nowide\nowide -type directory
 New-Item nowide\src -type directory
 New-Item nowide\test -type directory
@@ -7,7 +12,7 @@ Copy-Item ..\libs\nowide\src\*.cpp nowide\src
 Copy-Item ..\libs\nowide\test\*.cpp nowide\test\
 Copy-Item ..\libs\nowide\test\*.hpp nowide\test\
 Copy-Item .\*.hpp nowide\nowide\
-Get-ChildItem nowide -File -Recurse |
+Get-ChildItem nowide -File -Recurse -Include @("*.cpp","*.hpp") |
 Foreach-Object{
 	$content = Get-Content $_.FullName
 	$content = $content.replace('BOOST_NOWIDE_', 'NOWIDE_')
@@ -23,7 +28,4 @@ Foreach-Object{
 	$content = $content.replace('<boost/', '<nowide/')
 	$content | Set-Content $_.FullName
 }
-Copy-Item CMakeLists.txt nowide\
 
-#sed 's/namespace boost {//' -i $SOURCES
-#sed 's/} *\/\/ *namespace boost//' -i $SOURCES

@@ -1,9 +1,15 @@
 #!/bin/bash
 
-rm -fr nowide
-mkdir -p nowide/nowide
-mkdir -p nowide/src
-mkdir -p nowide/test
+if [[ -e "nowide/src/iostream.cpp" ]]; then
+  exit
+fi
+
+rm -fr nowide/nowide
+rm -fr nowide/src
+rm -fr nowide/test
+mkdir nowide/nowide
+mkdir nowide/src
+mkdir nowide/test
 
 cp ../boost/nowide/*.hpp nowide/nowide
 cp ../libs/nowide/src/*.cpp nowide/src
@@ -11,7 +17,6 @@ cp ../libs/nowide/test/*.cpp ../libs/nowide/test/*.hpp nowide/test
 cp ./*.hpp nowide/nowide/
 
 SOURCES="nowide/test/* nowide/src/* nowide/nowide/*"
-
 
 sed 's/BOOST_NOWIDE_/NOWIDE_/g' -i $SOURCES
 sed 's/BOOST_/NOWIDE_/g' -i $SOURCES
@@ -24,5 +29,3 @@ sed 's/} *\/\/ *namespace boost//' -i $SOURCES
 sed 's/<boost\/locale\//<nowide\//g' -i $SOURCES
 sed 's/<boost\/nowide\//<nowide\//g' -i $SOURCES
 sed 's/<boost\//<nowide\//g' -i $SOURCES
-
-cp CMakeLists.txt nowide/
