@@ -1,104 +1,134 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
+project(nowide)
 
-include_directories(.)
-enable_testing()
+#
+# Project Options
+#
 
-option(RUN_WITH_WINE		"Use wine to run tests" OFF)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+option(NOWIDE_BUILD_TESTS "Build NoWide Test Programs" ON)
 
-
-if(NOT LIBDIR)
-	set(LIBDIR lib CACHE STRING "Library installation directory" FORCE)
+if (MSVC)
+    option(USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC runtime library DLL" ON)
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-	set(CXX_FLAGS "-Wall -Wextra")
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-	set(CXX_FLAGS "-Wall -Wextra")
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-	set(CXX_FLAGS "-Wall")
-elseif(MSVC)
-	set(CXX_FLAGS "/EHsc /W3")
-endif()
+#
+# COMPILER FLAGS
+#
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-	if(MSVC)
-		set(NOWIDE_SUFFIX "-d")
+if (MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    if (NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
+        foreach (flag CMAKE_CXX_FLAGS
+                        CMAKE_CXX_FLAGS_DEBUG
+                        CMAKE_CXX_FLAGS_RELEASE
+                        CMAKE_CXX_FLAGS_MINSIZEREL
+                        CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+            if (${flag} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+            endif()
+            if (${flag} MATCHES "/MDd")
+                string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
+            endif()
+        endforeach()
+    endif()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /W3")
+else()
+    include(CheckCCompilerFlag)
+
+    add_definitions(-Wall)
+
+	set(CMAKE_REQUIRED_FLAGS "-fvisibility=hidden")
+	check_c_compiler_flag("" _NOWIDE_HAS_VISIBLITYHIDDEN)
+	if (_NOWIDE_HAS_VISIBLITYHIDDEN)
+		add_definitions(-fvisibility=hidden)
+	endif()
+
+	if (MINGW)
+		set(CMAKE_REQUIRED_FLAGS "-Wl,--nxcompat")
+		check_c_compiler_flag("" _NOWIDE_HAS_DEP)
+		if (_NOWIDE_HAS_DEP)
+			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--nxcompat ${CMAKE_SHARED_LINKER_FLAGS}")
+		endif()
+		set(CMAKE_REQUIRED_FLAGS "-Wl,--dynamicbase")
+		check_c_compiler_flag("" _NOWIDE_HAS_ASLR)
+		if (_NOWIDE_HAS_ASLR)
+			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--dynamicbase ${CMAKE_SHARED_LINKER_FLAGS}")
+		endif()
+		set(CMAKE_REQUIRED_FLAGS "-Wl,--high-entropy-va")
+		check_c_compiler_flag("" _NOWIDE_HAS_64ASLR)
+		if (_NOWIDE_HAS_64ASLR)
+			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--high-entropy-va ${CMAKE_SHARED_LINKER_FLAGS}")
+		endif()
 	endif()
 endif()
 
+#
+# Library Target
+#
 
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_FLAGS}")
-
-set(NOWIDE_TESTS
-    test_convert
-    test_stdio
-    test_fstream
-    )
-
-foreach(TEST ${NOWIDE_TESTS})
-    add_executable(${TEST} test/${TEST}.cpp)
-    if(RUN_WITH_WINE)
-       add_test(NAME ${TEST} WORKING_DIRECTORY ${CMAKE_BUILD_DIR} COMMAND wine ./${TEST}.exe)
-    else()
-       add_test(${TEST} ${TEST})
-    endif()
-endforeach()
-
-add_library(nowide SHARED src/iostream.cpp)
-set_target_properties(nowide	PROPERTIES VERSION 0.0.0 SOVERSION 0)
-set_target_properties(nowide 	PROPERTIES
-				CLEAN_DIRECT_OUTPUT 1
-				OUTPUT_NAME "nowide${NOWIDE_SUFFIX}"
-			)
-
-add_library(nowide-static STATIC src/iostream.cpp)
-set_target_properties(nowide-static PROPERTIES
-				CLEAN_DIRECT_OUTPUT 1
-				OUTPUT_NAME "nowide${NOWIDE_SUFFIX}"
-			)
-
-if(MSVC)
-	set_target_properties(nowide-static PROPERTIES PREFIX "lib")
+set(NOWIDE_LIB_NAME nowide0)
+set(NOWIDE_LIB_TYPE STATIC)
+if (BUILD_SHARED_LIBS)
+	set(NOWIDE_LIB_TYPE SHARED)
+	if (UNIX)
+		set(NOWIDE_LIB_NAME nowide)
+	endif()
 endif()
 
-add_executable(test_iostream_shared test/test_iostream.cpp)
-set_target_properties(nowide PROPERTIES COMPILE_DEFINITIONS DLL_EXPORT)
-set_target_properties(test_iostream_shared PROPERTIES COMPILE_DEFINITIONS DLL_EXPORT)
-target_link_libraries(test_iostream_shared nowide)
-
-add_executable(test_iostream_static test/test_iostream.cpp)
-target_link_libraries(test_iostream_static nowide-static)
-
-add_executable(test_system test/test_system.cpp)
+include_directories(.)
+add_library(nowide ${NOWIDE_LIB_TYPE} src/iostream.cpp)
+set_target_properties(nowide PROPERTIES
+                      OUTPUT_NAME "${NOWIDE_LIB_NAME}"
+                      VERSION 0.0.0
+                      SOVERSION 0
+                      POSITION_INDEPENDENT_CODE ON)
 
 
-add_executable(test_env_proto test/test_env.cpp)
-add_executable(test_env_win test/test_env.cpp)
-set_target_properties(test_env_win PROPERTIES COMPILE_DEFINITIONS NOWIDE_TEST_INCLUDE_WINDOWS)
+#
+# Test Executables
+#
 
-set(OTHER_TESTS test_iostream_shared test_iostream_static test_env_win test_env_proto)
+if(NOWIDE_BUILD_TESTS)
+	enable_testing()
+	add_executable(test_convert "test/test_convert.cpp")
+	target_link_libraries(test_convert nowide)
+    add_test(test_convert test_convert)
+	add_executable(test_stdio "test/test_stdio.cpp")
+	target_link_libraries(test_stdio nowide)
+    add_test(test_stdio test_stdio)
+	add_executable(test_fstream "test/test_fstream.cpp")
+	target_link_libraries(test_fstream nowide)
+    add_test(test_fstream test_fstream)
+	add_executable(test_iostream "test/test_iostream.cpp")
+	target_link_libraries(test_iostream nowide)
+    add_test(test_iostream test_iostream)
 
-if(RUN_WITH_WINE)
-	foreach(T ${OTHER_TESTS})
-		add_test(NAME ${T} WORKING_DIRECTORY ${CMAKE_BUILD_DIR} COMMAND wine ./${T}.exe)
-	endforeach()
+	add_executable(test_env_proto test/test_env.cpp)
+	target_link_libraries(test_env_proto nowide)
+    add_test(test_env_proto test_env_proto)
+	add_executable(test_env_win test/test_env.cpp)
+	set_target_properties(test_env_win PROPERTIES COMPILE_DEFINITIONS NOWIDE_USE_WINDOWS_H)
+	target_link_libraries(test_env_win nowide)
+    add_test(test_env_win test_env_win)
 
-	add_test(NAME test_system_n WORKING_DIRECTORY ${CMAKE_BUILD_DIR} COMMAND wine ./test_system.exe "-n")
-	add_test(NAME test_system_w WORKING_DIRECTORY ${CMAKE_BUILD_DIR} COMMAND wine ./test_system.exe "-w")
-else()
-	foreach(T ${OTHER_TESTS})
-		add_test(${T} ${T})
-	endforeach()
-
-	add_test(test_system_n test_system "-n")
-	add_test(test_system_w test_system "-w")
+	if(!MSYS)
+		# This test fails on MSYS2 MinTTY
+		add_executable(test_system "test/test_system.cpp")
+		target_link_libraries(test_system nowide)
+		add_test(test_system_n test_system "-n")
+		add_test(test_system_w test_system "-w")
+	endif()
 endif()
 
-install(TARGETS nowide nowide-static
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION ${LIBDIR}
-	ARCHIVE DESTINATION ${LIBDIR})
+#
+# Install NoWide
+#
 
-install(DIRECTORY nowide DESTINATION include)
-
+if(BUILD_SHARED_LIBS)
+	install(TARGETS nowide
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION ${LIBDIR}
+		ARCHIVE DESTINATION ${LIBDIR})
+	install(DIRECTORY nowide DESTINATION include)
+endif()
