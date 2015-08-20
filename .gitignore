@@ -2,3 +2,6 @@ standalone/build
 standalone/nowide/src
 standalone/nowide/test
 standalone/nowide/nowide
+VC12
+*.suo
+*.sdf
