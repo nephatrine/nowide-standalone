@@ -7,6 +7,11 @@ NoWide
 > The library provides an implementation of standard C and C++ library functions, such that their
 > inputs are UTF-8 aware on Windows without requiring to use Wide API.
 
+Build Requirements
+------------------
+
+This project uses CMake for its build system so you will definitely need that. There are no other requirements if in a Unix-like environment (Linux, OSX, MSYS, Cygwin, etc.). If using Windows without such an environment, you will need Microsoft PowerShell and will need to have it set to allow unsigned scripts to be run. PowerShell was used as the default Windows command shell lacks a *sed*-like tool.
+
 License
 -------
 
