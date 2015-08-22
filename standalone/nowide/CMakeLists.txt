@@ -67,7 +67,7 @@ endif()
 # Custom Commands
 #
 
-if (WIN32)
+if (WIN32 AND NOT MSYS)
 add_custom_command (
 	OUTPUT
 		${PROJECT_SOURCE_DIR}/src/iostream.cpp
@@ -121,28 +121,38 @@ set_target_properties(nowide PROPERTIES
 
 if(NOWIDE_BUILD_TESTS)
 	enable_testing()
+
 	add_executable(test_convert "test/test_convert.cpp")
 	target_link_libraries(test_convert nowide)
-    add_test(test_convert test_convert)
+	add_test(test_convert test_convert)
+
 	add_executable(test_stdio "test/test_stdio.cpp")
 	target_link_libraries(test_stdio nowide)
-    add_test(test_stdio test_stdio)
-	add_executable(test_fstream "test/test_fstream.cpp")
-	target_link_libraries(test_fstream nowide)
-    add_test(test_fstream test_fstream)
+	add_test(test_stdio test_stdio)
+
+	if(NOT APPLE)
+		# OSX fstream is bugged?
+		add_executable(test_fstream "test/test_fstream.cpp")
+		target_link_libraries(test_fstream nowide)
+		add_test(test_fstream test_fstream)
+	endif()
+
 	add_executable(test_iostream "test/test_iostream.cpp")
 	target_link_libraries(test_iostream nowide)
-    add_test(test_iostream test_iostream)
+	add_test(test_iostream test_iostream)
 
 	add_executable(test_env_proto test/test_env.cpp)
 	target_link_libraries(test_env_proto nowide)
-    add_test(test_env_proto test_env_proto)
-	add_executable(test_env_win test/test_env.cpp)
-	set_target_properties(test_env_win PROPERTIES COMPILE_DEFINITIONS NOWIDE_USE_WINDOWS_H)
-	target_link_libraries(test_env_win nowide)
-    add_test(test_env_win test_env_win)
+	add_test(test_env_proto test_env_proto)
 
-	if(!MSYS)
+	if(WIN32 OR MSYS)
+		add_executable(test_env_win test/test_env.cpp)
+		set_target_properties(test_env_win PROPERTIES COMPILE_DEFINITIONS NOWIDE_USE_WINDOWS_H)
+		target_link_libraries(test_env_win nowide)
+		add_test(test_env_win test_env_win)
+	endif()
+
+	if(NOT MSYS)
 		# This test fails on MSYS2 MinTTY
 		add_executable(test_system "test/test_system.cpp")
 		target_link_libraries(test_system nowide)
@@ -155,10 +165,9 @@ endif()
 # Install NoWide
 #
 
-if(BUILD_SHARED_LIBS)
-	install(TARGETS nowide
-		RUNTIME DESTINATION bin
-		LIBRARY DESTINATION ${LIBDIR}
-		ARCHIVE DESTINATION ${LIBDIR})
-	install(DIRECTORY nowide DESTINATION include)
-endif()
+install(TARGETS nowide
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib)
+install(DIRECTORY nowide DESTINATION include)
+

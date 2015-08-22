@@ -5,3 +5,4 @@ standalone/nowide/nowide
 VC12
 *.suo
 *.sdf
+.DS_Store
