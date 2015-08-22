@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#if [[ -e "nowide/src/iostream.cpp" ]]; then
-#  exit
-#fi
+if [[ -e "nowide/src/iostream.cpp" ]]; then
+  exit
+fi
 
 rm -fr nowide/nowide
 rm -fr nowide/src
