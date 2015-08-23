@@ -76,6 +76,7 @@ add_custom_command (
 		${PROJECT_SOURCE_DIR}/test/test_fstream.cpp
 		${PROJECT_SOURCE_DIR}/test/test_iostream.cpp
 		${PROJECT_SOURCE_DIR}/test/test_stdio.cpp
+		${PROJECT_SOURCE_DIR}/test/test_system.cpp
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../
 	COMMAND powershell -NoProfile -File convert.ps1
 )
@@ -88,6 +89,7 @@ add_custom_command (
 		${PROJECT_SOURCE_DIR}/test/test_fstream.cpp
 		${PROJECT_SOURCE_DIR}/test/test_iostream.cpp
 		${PROJECT_SOURCE_DIR}/test/test_stdio.cpp
+		${PROJECT_SOURCE_DIR}/test/test_system.cpp
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../
 	COMMAND ./convert
 )
@@ -122,22 +124,22 @@ set_target_properties(nowide PROPERTIES
 if(NOWIDE_BUILD_TESTS)
 	enable_testing()
 
-	add_executable(test_convert "test/test_convert.cpp")
+	add_executable(test_convert test/test_convert.cpp)
 	target_link_libraries(test_convert nowide)
 	add_test(test_convert test_convert)
 
-	add_executable(test_stdio "test/test_stdio.cpp")
+	add_executable(test_stdio test/test_stdio.cpp)
 	target_link_libraries(test_stdio nowide)
 	add_test(test_stdio test_stdio)
 
 	if(NOT APPLE)
 		# OSX fstream is bugged?
-		add_executable(test_fstream "test/test_fstream.cpp")
+		add_executable(test_fstream test/test_fstream.cpp)
 		target_link_libraries(test_fstream nowide)
 		add_test(test_fstream test_fstream)
 	endif()
 
-	add_executable(test_iostream "test/test_iostream.cpp")
+	add_executable(test_iostream test/test_iostream.cpp)
 	target_link_libraries(test_iostream nowide)
 	add_test(test_iostream test_iostream)
 
@@ -154,7 +156,7 @@ if(NOWIDE_BUILD_TESTS)
 
 	if(NOT MSYS)
 		# This test fails on MSYS2 MinTTY
-		add_executable(test_system "test/test_system.cpp")
+		add_executable(test_system test/test_system.cpp)
 		target_link_libraries(test_system nowide)
 		add_test(test_system_n test_system "-n")
 		add_test(test_system_w test_system "-w")
