@@ -34,29 +34,29 @@ if (MSVC)
     endif()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /W3")
 else()
-    include(CheckCCompilerFlag)
+    include(CheckCXXCompilerFlag)
 
     add_definitions(-Wall)
 
 	set(CMAKE_REQUIRED_FLAGS "-fvisibility=hidden")
-	check_c_compiler_flag("" _NOWIDE_HAS_VISIBLITYHIDDEN)
+	check_cxx_compiler_flag("" _NOWIDE_HAS_VISIBLITYHIDDEN)
 	if (_NOWIDE_HAS_VISIBLITYHIDDEN)
 		add_definitions(-fvisibility=hidden)
 	endif()
 
 	if (MINGW)
 		set(CMAKE_REQUIRED_FLAGS "-Wl,--nxcompat")
-		check_c_compiler_flag("" _NOWIDE_HAS_DEP)
+		check_cxx_compiler_flag("" _NOWIDE_HAS_DEP)
 		if (_NOWIDE_HAS_DEP)
 			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--nxcompat ${CMAKE_SHARED_LINKER_FLAGS}")
 		endif()
 		set(CMAKE_REQUIRED_FLAGS "-Wl,--dynamicbase")
-		check_c_compiler_flag("" _NOWIDE_HAS_ASLR)
+		check_cxx_compiler_flag("" _NOWIDE_HAS_ASLR)
 		if (_NOWIDE_HAS_ASLR)
 			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--dynamicbase ${CMAKE_SHARED_LINKER_FLAGS}")
 		endif()
 		set(CMAKE_REQUIRED_FLAGS "-Wl,--high-entropy-va")
-		check_c_compiler_flag("" _NOWIDE_HAS_64ASLR)
+		check_cxx_compiler_flag("" _NOWIDE_HAS_64ASLR)
 		if (_NOWIDE_HAS_64ASLR)
 			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--high-entropy-va ${CMAKE_SHARED_LINKER_FLAGS}")
 		endif()
@@ -112,8 +112,8 @@ include_directories(.)
 add_library(nowide ${NOWIDE_LIB_TYPE} src/iostream.cpp)
 set_target_properties(nowide PROPERTIES
                       OUTPUT_NAME "${NOWIDE_LIB_NAME}"
-                      VERSION 0.0.0
-                      SOVERSION 0
+                      VERSION "0.0.0"
+                      SOVERSION "0"
                       POSITION_INDEPENDENT_CODE ON)
 
 
@@ -167,9 +167,10 @@ endif()
 # Install NoWide
 #
 
+include("GNUInstallDirs")
 install(TARGETS nowide
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib)
-install(DIRECTORY nowide DESTINATION include)
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY nowide DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
