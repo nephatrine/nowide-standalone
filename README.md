@@ -10,6 +10,8 @@ NoWide
 Build Requirements
 ------------------
 
+[![Build Status](https://ci.appveyor.com/api/projects/status/sjgohhjyd42265r7?svg=true)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone) [![Binaries](https://img.shields.io/badge/bin-MSVC%20x64-brightgreen.svg)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone/build/artifacts)
+
 This project uses CMake for its build system so you will definitely need that. There are no other requirements if in a Unix-like environment (Linux, OSX, MSYS, Cygwin, etc.). If using Windows without such an environment, you will need Microsoft PowerShell and will need to have it set to allow unsigned scripts to be run. PowerShell was used as the default Windows command shell lacks a *sed*-like tool.
 
 License
