@@ -58,6 +58,14 @@ namespace nowide {
             open(file_name,mode);
         }
         
+        explicit basic_ifstream(std::string const &file_name,std::ios_base::openmode mode = std::ios_base::in) : 
+            internal_stream_type(0) 
+        {
+            buf_.reset(new internal_buffer_type());
+            std::ios::rdbuf(buf_.get());
+            open(file_name,mode);
+        }
+
         void open(char const *file_name,std::ios_base::openmode mode = std::ios_base::in)
         {
             if(!buf_->open(file_name,mode | std::ios_base::in)) {
@@ -67,6 +75,17 @@ namespace nowide {
                 this->clear();
             }
         }
+
+        void open(std::string const &file_name,std::ios_base::openmode mode = std::ios_base::in)
+        {
+            if(!buf_->open(file_name,mode | std::ios_base::in)) {
+                this->setstate(std::ios_base::failbit);
+            }
+            else {
+                this->clear();
+            }
+        }
+
         bool is_open()
         {
             return buf_->is_open();
@@ -113,6 +132,7 @@ namespace nowide {
             buf_.reset(new internal_buffer_type());
             std::ios::rdbuf(buf_.get());
         }
+
         explicit basic_ofstream(char const *file_name,std::ios_base::openmode mode = std::ios_base::out) :
             internal_stream_type(0)
         {
@@ -120,6 +140,15 @@ namespace nowide {
             std::ios::rdbuf(buf_.get());
             open(file_name,mode);
         }
+
+        explicit basic_ofstream(std::string const &file_name,std::ios_base::openmode mode = std::ios_base::out) :
+            internal_stream_type(0)
+        {
+            buf_.reset(new internal_buffer_type());
+            std::ios::rdbuf(buf_.get());
+            open(file_name,mode);
+        }
+
         void open(char const *file_name,std::ios_base::openmode mode = std::ios_base::out)
         {
             if(!buf_->open(file_name,mode | std::ios_base::out)) {
@@ -129,6 +158,17 @@ namespace nowide {
                 this->clear();
             }
         }
+
+        void open(std::string const &file_name,std::ios_base::openmode mode = std::ios_base::out)
+        {
+            if(!buf_->open(file_name,mode | std::ios_base::out)) {
+                this->setstate(std::ios_base::failbit);
+            }
+            else {
+                this->clear();
+            }
+        }
+
         bool is_open()
         {
             return buf_->is_open();
@@ -175,6 +215,7 @@ namespace nowide {
             buf_.reset(new internal_buffer_type());
             std::ios::rdbuf(buf_.get());
         }
+
         explicit basic_fstream(char const *file_name,std::ios_base::openmode mode = std::ios_base::out | std::ios_base::in) :
             internal_stream_type(0)
         {
@@ -182,6 +223,15 @@ namespace nowide {
             std::ios::rdbuf(buf_.get());
             open(file_name,mode);
         }
+
+        explicit basic_fstream(std::string const &file_name,std::ios_base::openmode mode = std::ios_base::out | std::ios_base::in) :
+            internal_stream_type(0)
+        {
+            buf_.reset(new internal_buffer_type());
+            std::ios::rdbuf(buf_.get());
+            open(file_name,mode);
+        }
+
         void open(char const *file_name,std::ios_base::openmode mode = std::ios_base::out | std::ios_base::out)
         {
             if(!buf_->open(file_name,mode)) {
@@ -191,6 +241,17 @@ namespace nowide {
                 this->clear();
             }
         }
+
+        void open(std::string const &file_name,std::ios_base::openmode mode = std::ios_base::out | std::ios_base::out)
+        {
+            if(!buf_->open(file_name,mode)) {
+                this->setstate(std::ios_base::failbit);
+            }
+            else {
+                this->clear();
+            }
+        }
+
         bool is_open()
         {
             return buf_->is_open();
