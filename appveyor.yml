@@ -11,12 +11,12 @@ build_script:
 - mkdir output
 - cd build-dll
 - cmake -G "Visual Studio 12 2013 Win64" -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output" ../nowide
-- msbuild INSTALL.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-- msbuild RUN_TESTS.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- msbuild INSTALL.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- msbuild RUN_TESTS.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - cd ..\build-lib
 - cmake -G "Visual Studio 12 2013 Win64" -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output" ../nowide
-- msbuild INSTALL.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-- msbuild RUN_TESTS.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- msbuild INSTALL.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- msbuild RUN_TESTS.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 artifacts:
 - path: .\standalone\output\
   name: nowide-vc12-x64
