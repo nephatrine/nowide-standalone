@@ -5,6 +5,7 @@ project(nowide)
 # Project Options
 #
 
+option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 option(NOWIDE_BUILD_TESTS "Build NoWide Test Programs" ON)
 
 if (MSVC)
@@ -98,14 +99,22 @@ endif()
 # Library Target
 #
 
+set(NOWIDE_LIB_NAME nowide0)
+set(NOWIDE_LIB_TYPE STATIC)
+if (BUILD_SHARED_LIBS)
+	set(NOWIDE_LIB_TYPE SHARED)
+	if (UNIX)
+		set(NOWIDE_LIB_NAME nowide)
+	endif()
+endif()
+
 include_directories(.)
-add_library(nowide STATIC src/iostream.cpp)
+add_library(nowide ${NOWIDE_LIB_TYPE} src/iostream.cpp)
 set_target_properties(nowide PROPERTIES
-                      OUTPUT_NAME "nowide"
+                      OUTPUT_NAME "${NOWIDE_LIB_NAME}"
                       VERSION "0.0.0"
                       SOVERSION "0"
                       POSITION_INDEPENDENT_CODE ON)
-
 
 #
 # Test Executables
