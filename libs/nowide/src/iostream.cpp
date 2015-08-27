@@ -5,6 +5,8 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
+// Note: does all pointer-math in DWORD, assumes no overflows.
+
 #define BOOST_NOWIDE_SOURCE
 #include <boost/nowide/iostream.hpp>
 #include <boost/nowide/convert.hpp>
@@ -43,8 +45,8 @@ namespace details {
         {
             if(!handle_)
                 return -1;
-            int n = pptr() - pbase();
-            int r = 0;
+            DWORD n = static_cast<DWORD>(pptr() - pbase());
+            DWORD r = 0;
             
             if(n > 0 && (r=write(pbase(),n)) < 0)
                     return -1;
@@ -59,14 +61,14 @@ namespace details {
         }
     private:
         
-        int write(char const *p,int n)
+        DWORD write(char const *p, DWORD n)
         {
             namespace uf = boost::locale::utf;
             char const *b = p;
             char const *e = p+n;
             DWORD size=0;
             if(!isatty_) {
-                if(!WriteFile(handle_,p,n,&size,0) || static_cast<int>(size) != n)
+                if(!WriteFile(handle_,p,n,&size,0) || size != n)
                     return -1;
                 return n;
             }
@@ -74,14 +76,14 @@ namespace details {
                 return -1;
             wchar_t *out = wbuffer_;
             uf::code_point c;
-            size_t decoded = 0;
+            DWORD decoded = 0;
             while(p < e && (c = uf::utf_traits<char>::decode(p,e))!=uf::illegal && c!=uf::incomplete) {
                 out = uf::utf_traits<wchar_t>::encode(c,out);
-                decoded = p-b;
+                decoded = static_cast<DWORD>(p-b);
             }
             if(c==uf::illegal)
                 return -1;
-            if(!WriteConsoleW(handle_,wbuffer_,out - wbuffer_,&size,0))
+            if(!WriteConsoleW(handle_,wbuffer_, static_cast<DWORD>(out - wbuffer_),&size,0))
                 return -1;
             return decoded;
         }
@@ -167,8 +169,8 @@ namespace details {
                 return read_bytes;
             }
             DWORD read_wchars = 0;
-            size_t n = wbuffer_size - wsize_;
-            if(!ReadConsoleW(handle_,wbuffer_,n,&read_wchars,0))
+            DWORD n = wbuffer_size - wsize_;
+            if(!ReadConsoleW(handle_,wbuffer_, n, &read_wchars,0))
                 return 0;
             wsize_ += read_wchars;
             char *out = buffer_;
@@ -176,10 +178,10 @@ namespace details {
             wchar_t *e = b + wsize_;
             wchar_t *p = b;
             uf::code_point c;
-            wsize_ = e-p;
+            wsize_ = static_cast<DWORD>(e-p);
             while(p < e && (c = uf::utf_traits<wchar_t>::decode(p,e))!=uf::illegal && c!=uf::incomplete) {
                 out = uf::utf_traits<char>::encode(c,out);
-                wsize_ = e-p;
+                wsize_ = static_cast<DWORD>(e-p);
             }
             
             if(c==uf::illegal)
@@ -193,13 +195,13 @@ namespace details {
             return out - buffer_;
         }
         
-        static const size_t buffer_size = 1024 * 3;
-        static const size_t wbuffer_size = 1024;
+        static const DWORD buffer_size = 1024 * 3;
+        static const DWORD wbuffer_size = 1024;
         char buffer_[buffer_size];
         wchar_t wbuffer_[buffer_size]; // for null
         HANDLE handle_;
         bool isatty_;
-        int wsize_;
+        DWORD wsize_;
         std::vector<char> pback_buffer_;
     };
 
