@@ -19,7 +19,7 @@ Usage
 
 Check the original [Doxygen documentation](http://cppcms.com/files/nowide/html/) for more information.
 
-If you are using a dynamic/shared build, you may need to define NOWIDE_DLL prior to including the headers for nowide::cin, nowide::cout, and nowide::cerr to function.
+If you are using a dynamic/shared build, you may need to define ```NOWIDE_DLL``` prior to including the headers for ```nowide::cin```, ```nowide::cout```, and ```nowide::cerr``` to function.
 
 License
 -------
