@@ -18,7 +18,7 @@
 #endif
 
 #ifdef NOWIDE_WINDOWS
-#   if defined(DLL_EXPORT) || defined(NOWIDE_EXPORT) || defined(nowide_EXPORTS)
+#   if defined(DLL_EXPORT) || defined(NOWIDE_EXPORT) || defined(NOWIDE_DLL)
 #       ifdef NOWIDE_SOURCE
 #           define NOWIDE_DECL __declspec(dllexport)
 #       else

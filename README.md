@@ -14,6 +14,13 @@ Build Requirements
 
 This project uses CMake for its build system so you will definitely need that. There are no other requirements if in a Unix-like environment (Linux, OSX, MSYS, Cygwin, etc.). If using Windows without such an environment, you will need Microsoft PowerShell and will need to have it set to allow unsigned scripts to be run. PowerShell was used as the default Windows command shell lacks a *sed*-like tool.
 
+Usage
+-----
+
+Check the original [Doxygen documentation](http://cppcms.com/files/nowide/html/) for more information.
+
+If you are using a dynamic/shared build, you may need to define NOWIDE_DLL prior to including the headers for nowide::cin, nowide::cout, and nowide::cerr to function.
+
 License
 -------
 

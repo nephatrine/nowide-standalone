@@ -38,6 +38,8 @@ else()
 
     add_definitions(-Wall)
 
+	set(OLD_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+
 	set(CMAKE_REQUIRED_FLAGS "-fvisibility=hidden")
 	check_cxx_compiler_flag("" _NOWIDE_HAS_VISIBLITYHIDDEN)
 	if (_NOWIDE_HAS_VISIBLITYHIDDEN)
@@ -61,6 +63,8 @@ else()
 			set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--high-entropy-va ${CMAKE_SHARED_LINKER_FLAGS}")
 		endif()
 	endif()
+	
+	set(CMAKE_REQUIRED_FLAGS ${OLD_CMAKE_REQUIRED_FLAGS})
 endif()
 
 #
@@ -99,13 +103,12 @@ endif()
 # Library Target
 #
 
-set(NOWIDE_LIB_NAME nowide0)
+set(NOWIDE_LIB_NAME nowide_static)
 set(NOWIDE_LIB_TYPE STATIC)
 if (BUILD_SHARED_LIBS)
+	add_definitions(-DNOWIDE_DLL)
 	set(NOWIDE_LIB_TYPE SHARED)
-	if (UNIX)
-		set(NOWIDE_LIB_NAME nowide)
-	endif()
+	set(NOWIDE_LIB_NAME nowide)
 endif()
 
 include_directories(.)

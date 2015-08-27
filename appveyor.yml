@@ -10,14 +10,12 @@ build_script:
 - mkdir build-lib
 - mkdir output
 - cd build-dll
-- cmake -G "Visual Studio 12 2013 Win64" -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output-msvc" ../nowide
+- cmake -G "Visual Studio 12 2013 Win64" -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output" ../nowide
 - msbuild INSTALL.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-- cd ..\build-lib
-- cmake -G "Visual Studio 12 2013 Win64" -DBUILD_SHARED_LIBS=OFF ../nowide
-- msbuild ALL_BUILD.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-- cp Debug\nowide0.lib ..\output\lib\nowide_static.lib
 - msbuild RUN_TESTS.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-- cd ..\build-dll
+- cd ..\build-lib
+- cmake -G "Visual Studio 12 2013 Win64" -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output" ../nowide
+- msbuild INSTALL.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - msbuild RUN_TESTS.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 artifacts:
 - path: .\standalone\output\
