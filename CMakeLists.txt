@@ -29,6 +29,7 @@ set(TARGET_OUTPUT_NAME "${NOWIDE_TARGET_NAME}")
 include(CheckCXXCompilerFlag)
 include(CMakeDependentOption)
 include(GNUInstallDirs)
+find_package(Doxygen)
 
 #
 # Include Files
@@ -43,6 +44,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 option(NOWIDE_BUILD_SHARED "Build Shared Library" ON)
 option(NOWIDE_BUILD_STATIC "Build Static Library" ON)
 cmake_dependent_option(NOWIDE_BUILD_TESTS "Build NoWide Tests" ON "NOT CMAKE_TOOLCHAIN_FILE" OFF)
+cmake_dependent_option(NOWIDE_BUILD_DOCS "Build NoWide Documentation" ON "DOXYGEN_FOUND" OFF)
 
 set(NOWIDE_HEADERS
 	"${PROJECT_SOURCE_DIR}/include/nowide/config.hpp"
@@ -214,6 +216,16 @@ foreach(NOWIDE_TARGET_TYPE ${NOWIDE_TARGET_TYPES})
 endforeach()
 
 #
+# Documentation
+#
+if(NOWIDE_BUILD_DOCS)
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in" "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" @ONLY)
+	add_custom_target(doc ALL "${DOXYGEN_EXECUTABLE}" "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+			COMMENT "Generating API Documentation" VERBATIM)
+endif()
+
+#
 # Tests
 #
 
@@ -296,4 +308,9 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/nowide" DESTINATION ${CMAKE_INS
 if(MSVC)
 	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Debug/${TARGET_OUTPUT_NAME}${TARGET_ABI_VER}.pdb" DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS Debug)
 	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/RelWithDebInfo/${TARGET_OUTPUT_NAME}${TARGET_ABI_VER}.pdb" DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS RelWithDebInfo)
+endif()
+if(NOWIDE_BUILD_DOCS)
+	install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" DESTINATION ${CMAKE_INSTALL_DOCDIR})
+	install(FILES "${PROJECT_SOURCE_DIR}/COPYING" DESTINATION ${CMAKE_INSTALL_DOCDIR})
+	install(FILES "${PROJECT_SOURCE_DIR}/README.md" DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif()
