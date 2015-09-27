@@ -3,7 +3,7 @@ NoWide
 
 |  Linux/GCC  |  Windows/MSVC  |  Binaries  |
 | :---------: | :------------: | :--------: |
-|  N/A  |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/sjgohhjyd42265r7?svg=true)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone)  |  [![Binaries](https://img.shields.io/badge/bin-MS%20VC12-brightgreen.svg)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone/build/artifacts)
+|  [![Linux Status](https://travis-ci.org/Nephatrine/nowide-standalone.svg?branch=master)](https://travis-ci.org/Nephatrine/nowide-standalone)  |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/sjgohhjyd42265r7?svg=true)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone)  |  [![Binaries](https://img.shields.io/badge/bin-MS%20VC12-brightgreen.svg)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone/build/artifacts)
 
 Boost.Nowide is a library implemented by Artyom Beilis that makes cross platform
 Unicode aware programming easier. This is a fork of his repository focusing on
@@ -49,7 +49,7 @@ Using NoWide
 Check the original [documentation](http://cppcms.com/files/nowide/html/) for
 more information.
 
-If you are using MSVC and have a **DLL** build of Epoxy, you will need to
+If you are using MSVC and have a **DLL** build of NoWide, you will need to
 ```#define NOWIDE_DLL``` prior to including the headers so the functions are
 decorated with ```__declspec(dllimport)``` as needed. This is not required if
 building with a ~~better~~different compiler such as MinGW GCC.
