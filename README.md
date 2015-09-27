@@ -30,7 +30,6 @@ You will need the following tools at a minimum in addition to the standard
 compilers for your system (GCC, Xcode/Clang, MinGW, MSVC, etc.).
 
 * CMake 2.8+
-* PowerShell (Windows Environment Only)
 
 Just compile as usual for a CMake project:
 

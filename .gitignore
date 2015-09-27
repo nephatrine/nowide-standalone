@@ -2,4 +2,5 @@ build
 VC12
 *.suo
 *.sdf
+*.opensdf
 .DS_Store
