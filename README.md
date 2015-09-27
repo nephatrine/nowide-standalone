@@ -1,30 +1,55 @@
 NoWide
 ======
 
-> Boost.Nowide is a library implemented by Artyom Beilis that make cross platform Unicode aware
-> programming easier.
->
-> The library provides an implementation of standard C and C++ library functions, such that their
-> inputs are UTF-8 aware on Windows without requiring to use Wide API.
+|  Linux/GCC  |  Windows/MSVC  |  Binaries  |
+| :---------: | :------------: | :--------: |
+|  N/A  |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/sjgohhjyd42265r7?svg=true)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone)  |  [![Binaries](https://img.shields.io/badge/bin-MS%20VC12-brightgreen.svg)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone/build/artifacts)
 
-Build Requirements
-------------------
+Boost.Nowide is a library implemented by Artyom Beilis that makes cross platform
+Unicode aware programming easier. This is a fork of his repository focusing on
+the standalone (non-Boost) version of the code.
 
-[![Build Status](https://ci.appveyor.com/api/projects/status/sjgohhjyd42265r7?svg=true)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone) [![Binaries](https://img.shields.io/badge/bin-MSVC%20x64-brightgreen.svg)](https://ci.appveyor.com/project/Nephatrine/nowide-standalone/build/artifacts)
+Features
+--------
 
-This project uses CMake for its build system so you will definitely need that. There are no other requirements if in a Unix-like environment (Linux, OSX, MSYS, Cygwin, etc.). If using Windows without such an environment, you will need Microsoft PowerShell and will need to have it set to allow unsigned scripts to be run. PowerShell was used as the default Windows command shell lacks a *sed*-like tool.
+On Windows, this library provides an implementation of the C and C++ library
+functions that is UTF8-aware and so you can ```fopen``` files with Unicode
+filenames in the same way you would on Linux or moden UNIX systems. Normally,
+you'd need to use the wide APIs and platform-specific code to use unicode on
+Windows and have messy ```#ifdef```s and when writing cross-platform code. This
+let's you simply use [UTF-8 Everywhere](http://utf8everywhere.org/) and have it
+work the same on all platforms.
 
-Usage
------
+On other operating systems, these functions are merely wrappers around the
+standard ones.
 
-Check the original [Doxygen documentation](http://cppcms.com/files/nowide/html/) for more information.
+Building NoWide
+---------------
 
-If you are using a dynamic/shared build, you may need to define ```NOWIDE_DLL``` prior to including the headers for ```nowide::cin```, ```nowide::cout```, and ```nowide::cerr``` to function.
+You will need the following tools at a minimum in addition to the standard
+compilers for your system (GCC, Xcode/Clang, MinGW, MSVC, etc.).
 
-License
--------
+* CMake 2.8+
+* PowerShell (Windows Environment Only)
 
-Copyright (c) 2012 Artyom Beilis (Tonkikh)
+Just compile as usual for a CMake project:
 
-Distributed under the
-[Boost Software License, Version 1.0](http://www.boost.org/LICENSE_1_0.txt).
+	mkdir build
+	cd build
+	cmake ..
+	make && make test
+
+and optionally:
+	
+	make install
+
+Using NoWide
+------------
+
+Check the original [documentation](http://cppcms.com/files/nowide/html/) for
+more information.
+
+If you are using MSVC and have a **DLL** build of Epoxy, you will need to
+```#define NOWIDE_DLL``` prior to including the headers so the functions are
+decorated with ```__declspec(dllimport)``` as needed. This is not required if
+building with a ~~better~~different compiler such as MinGW GCC.
