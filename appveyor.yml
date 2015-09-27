@@ -11,11 +11,11 @@ build_script:
 - mkdir output64
 - mkdir output32
 - cd build32
-- cmake -G "Visual Studio 12 2013" -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output32" ..
+- cmake -G "Visual Studio 12 2013" -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output32" ../nowide
 - msbuild INSTALL.vcxproj /p:Configuration=RelWithDebInfo /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - msbuild RUN_TESTS.vcxproj /p:Configuration=RelWithDebInfo /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - cd ..\build64
-- cmake -G "Visual Studio 12 2013 Win64" -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output64" ..
+- cmake -G "Visual Studio 12 2013 Win64" -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\standalone\output64" ../nowide
 - msbuild INSTALL.vcxproj /p:Configuration=RelWithDebInfo /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 - msbuild RUN_TESTS.vcxproj /p:Configuration=RelWithDebInfo /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 artifacts:
