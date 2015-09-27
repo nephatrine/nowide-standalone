@@ -69,9 +69,14 @@ if(NOT MSVC)
 		if(_COMPILER_HAS_STD_GNUPP11)
 			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 		else()
-			check_cxx_compiler_flag("-std=c++11" _COMPILER_HAS_STD_CPP11)
-			if(_COMPILER_HAS_STD_CPP11)
-				set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+			check_cxx_compiler_flag("-std=c++11" _COMPILER_HAS_STD_GNUPP0X)
+			if(_COMPILER_HAS_STD_GNUPP0X)
+				set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+			else()
+				check_cxx_compiler_flag("-std=c++11" _COMPILER_HAS_STD_CPP11)
+				if(_COMPILER_HAS_STD_CPP11)
+					set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+				endif()
 			endif()
 		endif()
 	endif()
@@ -207,3 +212,46 @@ foreach(NOWIDE_TARGET_TYPE ${NOWIDE_TARGET_TYPES})
 	set_target_properties("${NOWIDE_TARGET_NAME}_${NOWIDE_TARGET_TYPE}" PROPERTIES
 		POSITION_INDEPENDENT_CODE ON)
 endforeach()
+
+#
+# Tests
+#
+
+if(NOWIDE_BUILD_TESTS)
+	enable_testing()
+	foreach(NOWIDE_TARGET_TYPE ${NOWIDE_TARGET_TYPES})
+		add_executable(test_${NOWIDE_TARGET_TYPE}_convert test/test_convert.cpp)
+		target_link_libraries(test_${NOWIDE_TARGET_TYPE}_convert ${NOWIDE_TARGET_NAME}_${NOWIDE_TARGET_TYPE})
+		add_test(test_${NOWIDE_TARGET_TYPE}_convert test_${NOWIDE_TARGET_TYPE}_convert)
+
+		add_executable(test_${NOWIDE_TARGET_TYPE}_stdio test/test_stdio.cpp)
+		target_link_libraries(test_${NOWIDE_TARGET_TYPE}_stdio ${NOWIDE_TARGET_NAME}_${NOWIDE_TARGET_TYPE})
+		add_test(test_${NOWIDE_TARGET_TYPE}_stdio test_${NOWIDE_TARGET_TYPE}_stdio)
+
+		if(NOT APPLE)
+			# OSX fstream is bugged?
+			add_executable(test_${NOWIDE_TARGET_TYPE}_fstream test/test_fstream.cpp)
+			target_link_libraries(test_${NOWIDE_TARGET_TYPE}_fstream ${NOWIDE_TARGET_NAME}_${NOWIDE_TARGET_TYPE})
+			add_test(test_${NOWIDE_TARGET_TYPE}_fstream test_${NOWIDE_TARGET_TYPE}_fstream)
+		endif()
+		
+		add_executable(test_${NOWIDE_TARGET_TYPE}_iostream test/test_iostream.cpp)
+		target_link_libraries(test_${NOWIDE_TARGET_TYPE}_iostream ${NOWIDE_TARGET_NAME}_${NOWIDE_TARGET_TYPE})
+		add_test(test_${NOWIDE_TARGET_TYPE}_iostream test_${NOWIDE_TARGET_TYPE}_iostream)
+		
+	endforeach()
+endif()
+
+#
+# Install
+#
+
+install(TARGETS ${NOWIDE_TARGET_BUILT}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/nowide" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+if(MSVC)
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Debug/${TARGET_OUTPUT_NAME}${TARGET_ABI_VER}.pdb" DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS Debug)
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/RelWithDebInfo/${TARGET_OUTPUT_NAME}${TARGET_ABI_VER}.pdb" DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS RelWithDebInfo)
+endif()
