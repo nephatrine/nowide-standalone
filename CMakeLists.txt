@@ -26,10 +26,14 @@ set(TARGET_OUTPUT_NAME "${NOWIDE_TARGET_NAME}")
 # CMake Modules
 #
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/modules")
 include(CheckCXXCompilerFlag)
 include(CMakeDependentOption)
 include(GNUInstallDirs)
 find_package(Doxygen)
+find_package(HHC)
+find_package(LATEX)
+find_package(Perl)
 
 #
 # Include Files
@@ -44,7 +48,9 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 option(NOWIDE_BUILD_SHARED "Build Shared Library" ON)
 option(NOWIDE_BUILD_STATIC "Build Static Library" ON)
 cmake_dependent_option(NOWIDE_BUILD_TESTS "Build NoWide Tests" ON "NOT CMAKE_TOOLCHAIN_FILE" OFF)
-cmake_dependent_option(NOWIDE_BUILD_DOCS "Build NoWide Documentation" ON "DOXYGEN_FOUND" OFF)
+cmake_dependent_option(NOWIDE_BUILD_DOC_HTML "Build NoWide Documentation - HTML" ON "DOXYGEN_FOUND" OFF)
+cmake_dependent_option(NOWIDE_BUILD_DOC_CHM "Build NoWide Documentation - CHM" ON "HHC_FOUND AND NOWIDE_BUILD_DOC_HTML" OFF)
+cmake_dependent_option(NOWIDE_BUILD_DOC_TEX "Build NoWide Documentation - LaTeX" ON "DOXYGEN_FOUND AND LATEX_FOUND" OFF)
 
 set(NOWIDE_HEADERS
 	"${PROJECT_SOURCE_DIR}/include/nowide/config.hpp"
@@ -218,9 +224,40 @@ endforeach()
 #
 # Documentation
 #
-if(NOWIDE_BUILD_DOCS)
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in" "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" @ONLY)
-	add_custom_target(doc ALL "${DOXYGEN_EXECUTABLE}" "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+
+if(NOWIDE_BUILD_DOC_HTML)
+	set(NOWIDE_DOXYGEN_HTML YES)
+else()
+	set(NOWIDE_DOXYGEN_HTML NO)
+endif()
+
+if(NOWIDE_BUILD_DOC_CHM)
+	set(NOWIDE_DOXYGEN_HTMLHELP YES)
+else()
+	set(NOWIDE_DOXYGEN_HTMLHELP NO)
+endif()
+
+if(NOWIDE_BUILD_DOC_TEX)
+	set(NOWIDE_DOXYGEN_LATEX YES)
+else()
+	set(NOWIDE_DOXYGEN_LATEX NO)
+endif()
+
+if(NOWIDE_BUILD_DOC_HTML AND NOT LATEX_FOUND)
+	set(NOWIDE_DOXYGEN_MATHJAX YES)
+else()
+	set(NOWIDE_DOXYGEN_MATHJAX NO)
+endif()
+
+if(DOXYGEN_DOT_FOUND)
+	set(NOWIDE_DOXYGEN_DOT YES)
+else()
+	set(NOWIDE_DOXYGEN_DOT NO)
+endif()
+
+if(NOWIDE_BUILD_DOC_HTML OR NOWIDE_BUILD_DOC_TEX)
+	configure_file("Doxyfile.in" "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" @ONLY)
+	add_custom_target(doc ALL "${DOXYGEN_EXECUTABLE}" Doxyfile
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 			COMMENT "Generating API Documentation" VERBATIM)
 endif()
@@ -309,8 +346,14 @@ if(MSVC)
 	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Debug/${TARGET_OUTPUT_NAME}${TARGET_ABI_VER}.pdb" DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS Debug)
 	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/RelWithDebInfo/${TARGET_OUTPUT_NAME}${TARGET_ABI_VER}.pdb" DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS RelWithDebInfo)
 endif()
-if(NOWIDE_BUILD_DOCS)
+install(FILES "${PROJECT_SOURCE_DIR}/COPYING" DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install(FILES "${PROJECT_SOURCE_DIR}/README.md" DESTINATION ${CMAKE_INSTALL_DOCDIR})
+if(NOWIDE_BUILD_DOC_HTML)
 	install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" DESTINATION ${CMAKE_INSTALL_DOCDIR})
-	install(FILES "${PROJECT_SOURCE_DIR}/COPYING" DESTINATION ${CMAKE_INSTALL_DOCDIR})
-	install(FILES "${PROJECT_SOURCE_DIR}/README.md" DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif()
+if(NOWIDE_BUILD_DOC_TEX)
+	install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex" DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif()
+if(NOWIDE_BUILD_DOC_CHM)
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${NOWIDE_TARGET_NAME}.chm" DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif()
