@@ -8,29 +8,30 @@
 #ifndef NOWIDE_CONFIG_H_INCLUDED
 #define NOWIDE_CONFIG_H_INCLUDED
 
-
 #if (defined(__WIN32) || defined(_WIN32) || defined(WIN32)) && !defined(__CYGWIN__)
-#define NOWIDE_WINDOWS
+#	define NOWIDE_WINDOWS
 #endif
 
 #ifdef _MSC_VER
-#define NOWIDE_MSVC
+#	define NOWIDE_MSVC
 #endif
 
-#ifdef NOWIDE_WINDOWS
-#   if defined(DLL_EXPORT) || defined(NOWIDE_EXPORT) || defined(NOWIDE_DLL)
-#       ifdef NOWIDE_SOURCE
-#           define NOWIDE_DECL __declspec(dllexport)
-#       else
-#           define NOWIDE_DECL __declspec(dllimport)
-#       endif  //NOWIDE_SOURCE
-#   endif  // DYN_LINK
-#endif  
-
+#ifdef NOWIDE_DLL
+#	ifdef NOWIDE_SOURCE
+#		ifdef _WIN32
+#			define NOWIDE_DECL __declspec(dllexport)
+#		else
+#			define NOWIDE_DECL __attribute__((visibility("default")))
+#		endif
+#	else
+#		ifdef _WIN32
+#			define NOWIDE_DECL __declspec(dllimport)
+#		endif
+#	endif
+#endif
 #ifndef NOWIDE_DECL
-#   define NOWIDE_DECL
+#	define NOWIDE_DECL
 #endif
-
 
 #endif
 ///
