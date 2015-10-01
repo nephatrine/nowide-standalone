@@ -1,6 +1,8 @@
-build
-VC12
-*.suo
-*.sdf
 *.opensdf
+*.sdf
+*.suo
+*.user
 .DS_Store
+.vs
+MSVC
+build

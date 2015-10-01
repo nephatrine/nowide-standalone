@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -27,26 +27,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -67,24 +67,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)VC12\Lib$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)VC12\Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Lib$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
     <TargetName>nowide0_static</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>nowide0_static</TargetName>
-    <IntDir>$(SolutionDir)VC12\Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)VC12\Lib$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Lib$(PlatformTarget)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)VC12\Lib$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)VC12\Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Lib$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
     <TargetName>nowide0_static</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>nowide0_static</TargetName>
-    <IntDir>$(SolutionDir)VC12\Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)VC12\Lib$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Lib$(PlatformTarget)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -94,7 +94,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,7 +115,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,7 +138,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,7 +163,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -179,31 +179,31 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="..\COPYING" />
+    <Text Include="..\..\COPYING" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\iostream.cpp" />
+    <ClCompile Include="..\..\src\iostream.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\nowide\args.hpp" />
-    <ClInclude Include="..\include\nowide\cenv.hpp" />
-    <ClInclude Include="..\include\nowide\config.hpp" />
-    <ClInclude Include="..\include\nowide\convert.hpp" />
-    <ClInclude Include="..\include\nowide\cstdio.hpp" />
-    <ClInclude Include="..\include\nowide\cstdlib.hpp" />
-    <ClInclude Include="..\include\nowide\encoding_errors.hpp" />
-    <ClInclude Include="..\include\nowide\encoding_utf.hpp" />
-    <ClInclude Include="..\include\nowide\filebuf.hpp" />
-    <ClInclude Include="..\include\nowide\fstream.hpp" />
-    <ClInclude Include="..\include\nowide\iostream.hpp" />
-    <ClInclude Include="..\include\nowide\scoped_ptr.hpp" />
-    <ClInclude Include="..\include\nowide\stackstring.hpp" />
-    <ClInclude Include="..\include\nowide\system.hpp" />
-    <ClInclude Include="..\include\nowide\utf.hpp" />
-    <ClInclude Include="..\include\nowide\windows.hpp" />
+    <ClInclude Include="..\..\include\nowide\args.hpp" />
+    <ClInclude Include="..\..\include\nowide\cenv.hpp" />
+    <ClInclude Include="..\..\include\nowide\config.hpp" />
+    <ClInclude Include="..\..\include\nowide\convert.hpp" />
+    <ClInclude Include="..\..\include\nowide\cstdio.hpp" />
+    <ClInclude Include="..\..\include\nowide\cstdlib.hpp" />
+    <ClInclude Include="..\..\include\nowide\encoding_errors.hpp" />
+    <ClInclude Include="..\..\include\nowide\encoding_utf.hpp" />
+    <ClInclude Include="..\..\include\nowide\filebuf.hpp" />
+    <ClInclude Include="..\..\include\nowide\fstream.hpp" />
+    <ClInclude Include="..\..\include\nowide\iostream.hpp" />
+    <ClInclude Include="..\..\include\nowide\scoped_ptr.hpp" />
+    <ClInclude Include="..\..\include\nowide\stackstring.hpp" />
+    <ClInclude Include="..\..\include\nowide\system.hpp" />
+    <ClInclude Include="..\..\include\nowide\utf.hpp" />
+    <ClInclude Include="..\..\include\nowide\windows.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md" />
+    <None Include="..\..\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

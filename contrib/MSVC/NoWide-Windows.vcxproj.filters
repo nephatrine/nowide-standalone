@@ -15,64 +15,64 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\COPYING" />
+    <Text Include="..\..\COPYING" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\iostream.cpp">
+    <ClCompile Include="..\..\src\iostream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\nowide\args.hpp">
+    <ClInclude Include="..\..\include\nowide\args.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\cenv.hpp">
+    <ClInclude Include="..\..\include\nowide\cenv.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\config.hpp">
+    <ClInclude Include="..\..\include\nowide\config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\convert.hpp">
+    <ClInclude Include="..\..\include\nowide\convert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\cstdio.hpp">
+    <ClInclude Include="..\..\include\nowide\cstdio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\cstdlib.hpp">
+    <ClInclude Include="..\..\include\nowide\cstdlib.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\encoding_errors.hpp">
+    <ClInclude Include="..\..\include\nowide\encoding_errors.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\encoding_utf.hpp">
+    <ClInclude Include="..\..\include\nowide\encoding_utf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\filebuf.hpp">
+    <ClInclude Include="..\..\include\nowide\filebuf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\fstream.hpp">
+    <ClInclude Include="..\..\include\nowide\fstream.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\iostream.hpp">
+    <ClInclude Include="..\..\include\nowide\iostream.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\scoped_ptr.hpp">
+    <ClInclude Include="..\..\include\nowide\scoped_ptr.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\stackstring.hpp">
+    <ClInclude Include="..\..\include\nowide\stackstring.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\system.hpp">
+    <ClInclude Include="..\..\include\nowide\system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\utf.hpp">
+    <ClInclude Include="..\..\include\nowide\utf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nowide\windows.hpp">
+    <ClInclude Include="..\..\include\nowide\windows.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md" />
+    <None Include="..\..\README.md" />
   </ItemGroup>
 </Project>
